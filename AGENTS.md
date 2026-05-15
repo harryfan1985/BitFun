@@ -9,25 +9,29 @@ Repository rule: **keep product logic platform-agnostic, then expose it through 
 ## Quick start
 
 1. Read `README.md` and `CONTRIBUTING.md` before architecture-sensitive changes.
-2. For desktop development, prefer `pnpm run desktop:dev` — it provides full hot-reload (Vite HMR + Rust auto-rebuild & restart). Use `pnpm run desktop:preview:debug` only when you need a faster cold-start for frontend-only iteration (Rust changes are not auto-rebuilt).
-3. After changes, run the smallest matching verification from the table below.
+2. **Windows only**: The desktop app requires OpenSSL. The `desktop:dev` / `desktop:build*` scripts auto-bootstrap it via `scripts/ensure-openssl-windows.mjs`. Alternatively, download [FireDaemon OpenSSL 3.5.5 LTS](https://download.firedaemon.com/FireDaemon-OpenSSL/openssl-3.5.5.zip), set `OPENSSL_DIR` + `OPENSSL_STATIC=1`. See `CONTRIBUTING.md` for full instructions and `desktop:dev:raw` notes.
+3. For desktop development, prefer `pnpm run desktop:dev` — it provides full hot-reload (Vite HMR + Rust auto-rebuild & restart). Use `pnpm run desktop:preview:debug` only when you need a faster cold-start for frontend-only iteration (Rust changes are not auto-rebuilt).
+4. After changes, run the smallest matching verification from the table below.
 
 ## Module index
 
 | Module | Path | Agent doc |
 |---|---|---|
-| Core (product logic) | `src/crates/core` | [AGENTS.md](src/crates/core/AGENTS.md) |
-| Extracted core support | `src/crates/{core-types,agent-stream,runtime-ports,terminal,tool-runtime}` | (use core guide) |
+| Core (product logic) | `src/crates/core` | [AGENTS.md](src/crates/core/AGENTS.md); sub: [deep_review](src/crates/core/src/agentic/deep_review/AGENTS.md), [execution](src/crates/core/src/agentic/execution/AGENTS.md) |
+| Extracted core support | `src/crates/{core-types,agent-stream,runtime-ports,terminal,tool-runtime,events}` | (use core guide) |
 | Core owner crates | `src/crates/{services-core,services-integrations,agent-tools,tool-packs}` | (use core guide + decomposition guardrails) |
 | Product domains | `src/crates/product-domains` | [AGENTS.md](src/crates/product-domains/AGENTS.md) |
 | Transport adapters | `src/crates/transport` | (use core guide) |
 | API layer | `src/crates/api-layer` | (use core guide) |
 | AI adapters | `src/crates/ai-adapters` | [AGENTS.md](src/crates/ai-adapters/AGENTS.md) |
+| ACP protocol | `src/crates/acp` | (use core guide + ACP guardrails below) |
+| WebDriver support | `src/crates/webdriver` | (use core guide) |
 | Desktop app | `src/apps/desktop` | [AGENTS.md](src/apps/desktop/AGENTS.md) |
 | Server | `src/apps/server` | (use core guide) |
 | CLI | `src/apps/cli` | (use core guide) |
 | Relay server | `src/apps/relay-server` | (use core guide) |
-| Shared frontend | `src/web-ui` | [AGENTS.md](src/web-ui/AGENTS.md) |
+| Shared frontend | `src/web-ui` | [AGENTS.md](src/web-ui/AGENTS.md); sub: [deep-review-ui](src/web-ui/src/flow_chat/deep-review/AGENTS.md) |
+| Mobile web | `src/mobile-web` | (use web-ui guide) |
 | Installer | `BitFun-Installer` | [AGENTS.md](BitFun-Installer/AGENTS.md) |
 | E2E tests | `tests/e2e` | [AGENTS.md](tests/e2e/AGENTS.md) |
 
@@ -51,16 +55,24 @@ cargo check --workspace
 # Test
 pnpm --dir src/web-ui run test:run
 cargo test --workspace
+./scripts/test-acp.sh             # ACP protocol tests
+pnpm run cli:test                 # CLI tests
 
 # Build
 cargo build -p bitfun-desktop
 pnpm run build:web
+pnpm run installer:build          # Installer app
 
 # Fast builds (for development / CI speed)
 pnpm run desktop:build:fast           # debug build, no bundling
 pnpm run desktop:build:release-fast   # release with reduced LTO
 pnpm run desktop:build:nsis:fast      # Windows installer, release-fast profile
 pnpm run installer:build:fast         # installer app, fast mode
+
+# E2E
+pnpm run e2e:test                 # full E2E suite
+pnpm run e2e:test:l0              # level 0 (smoke)
+pnpm run e2e:test:smoke           # smoke tests only
 ```
 
 For the full script list, see [`package.json`](package.json).
@@ -130,6 +142,15 @@ and milestone verification gates.
 - Tool migrations must preserve expanded/collapsed exposure, prompt-visible
   manifests, `ToolUseContext.unlocked_collapsed_tools`, and desktop/MCP/ACP
   tool catalog behavior.
+
+### ACP (Agent Communication Protocol) guardrails
+
+- `src/crates/acp` owns the ACP protocol implementation: message framing,
+  session negotiation, and tool catalog exchange.
+- ACP timeout handling and Web operation-diff fallback are product-surface
+  behavior; keep protocol logic in `acp`, share facts through contracts, not
+  UI/protocol implementation details.
+- Test ACP changes with `./scripts/test-acp.sh` or `node scripts/test-acp.js`.
 
 ### Latest-main runtime anchors
 
@@ -213,6 +234,7 @@ Session data is stored under `.bitfun/sessions/{session_id}/`.
 | Behavior covered by desktop smoke/functional flows | `cargo build -p bitfun-desktop` then the nearest E2E spec or `pnpm run e2e:test:l0` |
 | `src/crates/ai-adapters` | Relevant Rust checks above **and** `cargo test -p bitfun-agent-stream` for stream contracts |
 | Installer app | `pnpm run installer:build` |
+| ACP protocol (`src/crates/acp`) | `cargo check -p bitfun-acp && cargo test -p bitfun-acp` and `./scripts/test-acp.sh` |
 
 ## Where to look first
 
@@ -225,6 +247,8 @@ Session data is stored under `.bitfun/sessions/{session_id}/`.
 | MCP / LSP / remote | `src/crates/core/src/service/mcp/`, `src/crates/core/src/service/lsp/`, `src/crates/core/src/service/remote_connect/`, `src/crates/core/src/service/remote_ssh/` |
 | Desktop APIs | `src/apps/desktop/src/api/`, `src/crates/api-layer/src/`, `src/crates/transport/src/adapters/tauri.rs` |
 | Relay server | `src/apps/relay-server/` |
+| ACP protocol | `src/crates/acp/src/` |
+| WebDriver / browser automation | `src/crates/webdriver/src/` |
 | Web/server communication | `src/web-ui/src/infrastructure/api/`, `src/crates/transport/src/adapters/websocket.rs`, `src/apps/server/src/routes/`, `src/apps/server/src/main.rs` |
 
 ## Agent-doc priority
