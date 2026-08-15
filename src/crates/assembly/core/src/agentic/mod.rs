@@ -46,6 +46,10 @@ pub mod goal_mode;
 pub(crate) mod init_agents_md;
 pub mod system;
 
+// Buddy hardware approval bridge (feature-gated)
+#[cfg(feature = "buddy")]
+pub mod buddy;
+
 // Agents module
 pub mod agents;
 pub mod workspace;

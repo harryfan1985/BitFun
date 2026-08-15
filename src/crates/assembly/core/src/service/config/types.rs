@@ -63,6 +63,9 @@ pub struct GlobalConfig {
     pub tool_permissions: ToolPermissionConfig,
     #[serde(default)]
     pub memories: MemoriesConfig,
+    /// Buddy hardware approval bridge configuration.
+    #[serde(default, skip_serializing_if = "BuddyConfig::is_default")]
+    pub buddy: BuddyConfig,
     /// Project-scoped overlays stored in the shared config document.
     #[serde(default, skip_serializing_if = "ProjectConfig::is_empty")]
     pub project: ProjectConfig,
@@ -1734,6 +1737,7 @@ impl Default for GlobalConfig {
             memories: MemoriesConfig::default(),
             project: ProjectConfig::default(),
             tool_permissions: ToolPermissionConfig::default(),
+            buddy: BuddyConfig::default(),
             mcp_servers: None,
             acp_clients: None,
             appearance: AppearanceConfig::default(),
@@ -2173,16 +2177,77 @@ impl AIModelConfig {
     }
 }
 
+/// Buddy hardware approval bridge configuration.
+///
+/// Routes tool confirmation requests to an M5StickC Plus physical device over
+/// BLE. The BLE transport is owned by the `buddy-ble` adapter; the only
+/// user-facing setting is whether the feature is enabled.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(default, rename_all = "camelCase")]
+pub struct BuddyConfig {
+    /// Whether the Buddy feature is enabled.
+    pub enabled: bool,
+}
+
+impl Default for BuddyConfig {
+    fn default() -> Self {
+        Self { enabled: false }
+    }
+}
+
+impl BuddyConfig {
+    /// Returns true when the config matches defaults (not configured by user).
+    fn is_default(&self) -> bool {
+        *self == BuddyConfig::default()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::{
         AIConfig, AIExperienceConfig, AIModelConfig, AgentModelDefaultsConfig, AgentProfileConfig,
-        AgentProfileView, AppConfig, AppLoggingConfig, AuthConfig, GlobalConfig,
+        AgentProfileView, AppConfig, AppLoggingConfig, AuthConfig, BuddyConfig, GlobalConfig,
         MemoryExternalContextPolicy, ModelExchangeTracingMode, NotificationConfig, OpenCodePlan,
         SubagentBatchExecutionPolicy, SubagentModelSelection, SubscriptionProvider,
         UserSkillGroupsConfig, UserToolGroupsConfig,
     };
     use bitfun_runtime_ports::ToolPermissionConfig;
+
+    #[test]
+    fn buddy_config_defaults_to_disabled() {
+        let config = BuddyConfig::default();
+        assert!(!config.enabled);
+    }
+
+    #[test]
+    fn buddy_config_backward_compat_omitted_field() {
+        let config: GlobalConfig =
+            serde_json::from_value(serde_json::json!({})).expect("empty config should default");
+        assert!(!config.buddy.enabled);
+    }
+
+    #[test]
+    fn buddy_config_round_trip() {
+        let config = BuddyConfig { enabled: true };
+        let json = serde_json::to_value(&config).expect("serialize");
+        let restored: BuddyConfig = serde_json::from_value(json).expect("deserialize");
+        assert_eq!(config, restored);
+    }
+
+    #[test]
+    fn buddy_config_ignores_legacy_fields() {
+        // Old persisted config carried bridge_url/mode/etc; those are now
+        // ignored and the feature stays disabled unless enabled was set.
+        let json = serde_json::json!({
+            "enabled": true,
+            "bridgeUrl": "http://localhost:8765",
+            "callbackPort": 48765,
+            "mode": "managed"
+        });
+        let config: BuddyConfig =
+            serde_json::from_value(json).expect("legacy payload should deserialize");
+        assert!(config.enabled);
+    }
 
     #[test]
     fn prevent_sleep_defaults_to_disabled() {

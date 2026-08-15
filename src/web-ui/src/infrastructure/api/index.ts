@@ -13,6 +13,7 @@ export * from './service-api/PermissionAPI';
 export * from './service-api/PageAPI';
 export * from './service-api/SpeechAPI';
 export * from './service-api/WorktreeAPI';
+export * from './service-api/BuddyAPI';
 
 // Import API modules
 import { workspaceAPI } from './service-api/WorkspaceAPI';
@@ -35,6 +36,7 @@ import { gitRepoHistoryAPI, type GitRepoHistory } from './service-api/GitRepoHis
 import { sessionAPI } from './service-api/SessionAPI';
 import { i18nAPI } from './service-api/I18nAPI';
 import { btwAPI } from './service-api/BtwAPI';
+import { buddyAPI } from './service-api/BuddyAPI';
 import { editorAiAPI } from './service-api/EditorAiAPI';
 import { reviewPlatformAPI } from './service-api/ReviewPlatformAPI';
 import { insightsApi } from './insightsApi';
@@ -42,7 +44,7 @@ import { speechAPI } from './service-api/SpeechAPI';
 import { worktreeAPI } from './service-api/WorktreeAPI';
 
 // Export API modules
-export { workspaceAPI, configAPI, aiApi, toolAPI, agentAPI, systemAPI, projectAPI, diffAPI, snapshotAPI, globalAPI, contextAPI, cronAPI, permissionAPI, pageAPI, gitAPI, gitAgentAPI, gitRepoHistoryAPI, sessionAPI, i18nAPI, btwAPI, editorAiAPI, reviewPlatformAPI, insightsApi, speechAPI, worktreeAPI };
+export { workspaceAPI, configAPI, aiApi, toolAPI, agentAPI, systemAPI, projectAPI, diffAPI, snapshotAPI, globalAPI, contextAPI, cronAPI, permissionAPI, pageAPI, gitAPI, gitAgentAPI, gitRepoHistoryAPI, sessionAPI, i18nAPI, btwAPI, buddyAPI, editorAiAPI, reviewPlatformAPI, insightsApi, speechAPI, worktreeAPI };
 export * from './service-api/ReviewPlatformAPI';
 
 // Export types
@@ -71,6 +73,7 @@ export const bitfunAPI = {
   session: sessionAPI,
   i18n: i18nAPI,
   btw: btwAPI,
+  buddy: buddyAPI,
   editorAi: editorAiAPI,
   reviewPlatform: reviewPlatformAPI,
   insights: insightsApi,

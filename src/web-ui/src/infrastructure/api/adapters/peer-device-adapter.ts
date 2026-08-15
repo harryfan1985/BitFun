@@ -119,6 +119,12 @@ const LOCAL_ONLY_COMMANDS = new Set([
   'speech_append_audio_chunk',
   'speech_finish_input_session',
   'speech_cancel_input_session',
+  // Buddy hardware approval bridge is a local BLE peripheral.
+  'buddy_get_config',
+  'buddy_set_config',
+  'buddy_get_status',
+  'buddy_test_connection',
+  'buddy_check_prerequisites',
 ]);
 
 /**

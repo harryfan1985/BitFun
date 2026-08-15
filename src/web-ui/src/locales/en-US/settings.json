@@ -13,6 +13,7 @@
       "sessionPermissions": [],
       "quickActions": [],
       "review": [],
+      "buddy": [],
       "memories": []
     },
     "tabDescriptions": {
@@ -25,6 +26,7 @@
       "quickActions": "One-click AI actions after coding. Built-in and customizable prompts.",
       "voiceInput": "Local microphone input and speech-to-text model.",
       "review": "Review strategy, coverage depth, capacity, cost, and latency controls.",
+      "buddy": "Connect a hardware M5StickC device as a physical approval button.",
       "memories": "Automatic memory generation, injection, retention windows, and memory models.",
       "mcpTools": "MCP servers and tool integrations.",
       "externalSources": "Load compatible commands and extensions from other AI applications.",
@@ -50,6 +52,7 @@
       "quickActions": "Quick Actions",
       "voiceInput": "Voice Input",
       "review": "Review",
+      "buddy": "Buddy",
       "memories": "Memory",
       "skills": "Skills",
       "mcpTools": "MCP",

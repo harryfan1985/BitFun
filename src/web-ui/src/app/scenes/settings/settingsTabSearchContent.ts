@@ -131,6 +131,15 @@ export const SETTINGS_TAB_SEARCH_CONTENT: Record<ConfigTab, readonly SettingsTab
     { ns: 'settings/review', key: 'capacity.maxQueueWaitSeconds.label' },
   ],
 
+  buddy: [
+    { ns: 'settings/buddy', key: 'title' },
+    { ns: 'settings/buddy', key: 'subtitle' },
+    { ns: 'settings/buddy', key: 'general.title' },
+    { ns: 'settings/buddy', key: 'general.description' },
+    { ns: 'settings/buddy', key: 'connection.title' },
+    { ns: 'settings/buddy', key: 'status.title' },
+  ],
+
   memories: [
     { ns: 'settings/memories', key: 'title' },
     { ns: 'settings/memories', key: 'subtitle' },

@@ -219,6 +219,14 @@ pub const REMOTE_WORKSPACE_COMMAND_POLICIES: &[(&str, RemoteWorkspacePolicy)] = 
         RemoteWorkspacePolicy::LocalOnly,
     ),
     (
+        "buddy_check_prerequisites",
+        RemoteWorkspacePolicy::LocalOnly,
+    ),
+    ("buddy_get_config", RemoteWorkspacePolicy::WorkspaceAgnostic),
+    ("buddy_get_status", RemoteWorkspacePolicy::LocalOnly),
+    ("buddy_set_config", RemoteWorkspacePolicy::WorkspaceAgnostic),
+    ("buddy_test_connection", RemoteWorkspacePolicy::LocalOnly),
+    (
         "browser_control_get_status",
         RemoteWorkspacePolicy::LocalOnly,
     ),

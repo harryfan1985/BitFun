@@ -134,11 +134,10 @@ windows-core = { workspace = true }
 webview2-com = { workspace = true }
 
 [features]
-default = []
-# Enable webview devtools and element inspector for development builds.
-# Only active in debug builds or when explicitly requested via --features devtools.
-# Never enabled in release profile intended for end users.
+default = ["buddy"]
 devtools = ["tauri/devtools", "bitfun-webdriver/embedded"]
+# Buddy hardware approval bridge.
+buddy = ["bitfun-core/buddy"]
 
 [target.'cfg(target_os = "linux")'.dependencies]
 atspi = { workspace = true }

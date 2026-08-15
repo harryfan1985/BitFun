@@ -31,6 +31,7 @@ export const SETTINGS_TAB_I18N_NAMESPACES: Record<ConfigTab, readonly I18nNamesp
   'quick-actions': ['settings/quick-actions'],
   'voice-input': ['settings/voice-input'],
   review: ['settings/review'],
+  buddy: ['settings/buddy'],
   memories: ['settings/memories'],
   'mcp-tools': ['settings/mcp-tools', 'settings/mcp', 'shared'],
   'external-sources': ['settings/external-sources', 'settings/hooks', 'shared'],

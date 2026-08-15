@@ -1,0 +1,126 @@
+{
+  "title": "Buddy",
+  "subtitle": "连接 M5StickC Plus 硬件设备作为物理工具审批通道。",
+  "loading": "正在加载 Buddy 设置...",
+  "desktopOnly": {
+    "title": "仅桌面端",
+    "description": "Buddy 是 BitFun 桌面应用中的本地硬件外设功能。"
+  },
+  "general": {
+    "title": "常规",
+    "description": "启用 Buddy 功能并选择 bridge 进程的管理方式。",
+    "enable": {
+      "label": "启用 Buddy",
+      "description": "将工具确认请求路由到你的 M5StickC Plus 设备。"
+    },
+    "mode": {
+      "label": "Bridge 模式",
+      "description": "托管：BitFun 启动并监控 bridge 进程。外部：你自行运行。",
+      "managed": "托管（自动启动）",
+      "external": "外部（手动）"
+    }
+  },
+  "connection": {
+    "title": "连接",
+    "description": "BitFun 与 agent-buddy-bridge 之间的 HTTP 连接。",
+    "bridgeUrl": {
+      "label": "Bridge URL",
+      "description": "agent-buddy-bridge HTTP 服务器的地址。"
+    },
+    "callbackPort": {
+      "label": "回调端口",
+      "description": "BitFun 接收审批结果的回调服务器端口。"
+    },
+    "bindAddress": {
+      "label": "绑定地址",
+      "description": "回调服务器的绑定地址。使用 127.0.0.1 限制为本地访问。"
+    }
+  },
+  "paths": {
+    "title": "Bridge 路径",
+    "description": "托管模式下启动 bridge 进程时使用的路径。",
+    "bridgePath": {
+      "label": "Bridge 路径",
+      "description": "agent-buddy-bridge 项目目录路径。"
+    },
+    "pythonPath": {
+      "label": "Python 路径",
+      "description": "带有 bleak/CoreBluetooth 的 Python 可执行文件。macOS 上自动检测。"
+    }
+  },
+  "status": {
+    "title": "状态",
+    "description": "Buddy bridge 和设备的当前连接状态。",
+    "bridge": {
+      "label": "Bridge",
+      "description": "bridge 进程和 BLE 设备连接的健康状态。"
+    },
+    "online": "在线",
+    "offline": "离线",
+    "pending": "{{count}} 待处理",
+    "test": {
+      "label": "测试连接",
+      "description": "向 bridge 发送测试状态推送并验证可达性。",
+      "button": "测试连接",
+      "testing": "正在测试..."
+    }
+  },
+  "state": {
+    "not_configured": "未配置",
+    "bridge_starting": "正在启动 bridge...",
+    "scanning_for_device": "正在扫描设备...",
+    "connected": "已连接",
+    "bridge_offline": "Bridge 离线",
+    "device_disconnected": "设备已断开"
+  },
+  "pill": {
+    "scanning": "扫描中...",
+    "offline": "Buddy 离线"
+  },
+  "alert": {
+    "disabled": "Buddy 已禁用。启用后可将工具审批路由到你的 M5StickC 设备。"
+  },
+  "messages": {
+    "saved": "Buddy 设置已保存。",
+    "saveFailed": "保存 Buddy 设置失败。",
+    "testSuccess": "Bridge 连接已验证。",
+    "testFailed": "Bridge 连接测试失败。"
+  },
+  "wizard": {
+    "title": "Buddy 配对向导",
+    "open": "打开配对向导",
+    "prerequisites": {
+      "title": "前提条件检查",
+      "macos": "macOS（CoreBluetooth 支持 BLE）",
+      "python": "Python 3.9+",
+      "bridge": "agent-buddy-bridge 已安装",
+      "bleak": "bleak + aiohttp 包",
+      "check": "检查前提条件",
+      "checking": "正在检查...",
+      "failed": "检查前提条件失败",
+      "unsupported": "Buddy 当前仅支持 macOS。此功能依赖 CoreBluetooth 进行 BLE 通信，在当前系统上不可用。"
+    },
+    "bridge": {
+      "title": "Bridge 启动",
+      "description": "BitFun 将以托管模式启动 agent-buddy-bridge 进程。",
+      "managed": "Bridge 将使用 --platforms bitfun 自动启动。",
+      "continue": "继续"
+    },
+    "device": {
+      "title": "设备发现",
+      "description": "正在搜索广播为 Claude-XXXX 的 M5StickC Plus 设备。",
+      "scan": "扫描设备",
+      "scanning": "正在扫描 M5StickC...",
+      "notFound": "未找到 M5StickC。请确保设备已开机且未连接到其他主机。",
+      "scanFailed": "扫描设备失败。"
+    },
+    "test": {
+      "title": "测试审批",
+      "description": "将向设备发送测试状态。按 M5StickC 按钮验证往返。",
+      "button": "发送测试推送",
+      "testing": "等待按钮按下...",
+      "success": "测试审批已收到！Buddy 已就绪。",
+      "failed": "测试审批失败。请检查 bridge 日志。"
+    }
+  }
+}

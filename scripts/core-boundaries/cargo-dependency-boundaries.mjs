@@ -168,6 +168,7 @@ const SERVICES_INTEGRATIONS_TOKIO_AGGREGATES = new Set(['product-full']);
 const SERVICES_CORE_TOKIO_AGGREGATES = new Set(['session-git']);
 const CORE_TOKIO_FEATURES = new Map([
   ['agent-runtime', ['io-util', 'macros', 'rt', 'time']],
+  ['buddy', ['sync', 'time']],
   ['mcp-runtime', ['io-util', 'macros', 'rt', 'rt-multi-thread', 'time']],
   ['browser-control', ['net', 'rt', 'time']],
   ['debug-log', ['macros', 'net', 'rt', 'time']],
@@ -293,7 +294,11 @@ function reqwestDependencyFeatureReferences(references) {
 }
 
 const REQWEST_PACKAGE_PROFILES = new Map([
-  ['bitfun-core', { dependencyFeatures: [], optional: true }],
+  ['bitfun-core', {
+    dependencyFeatures: [],
+    optional: true,
+    allowedPackageFeatureRefs: new Set(['reqwest/json', 'reqwest/rustls']),
+  }],
   ['bitfun-services-integrations', {
     dependencyFeatures: ['http2'],
     optional: true,

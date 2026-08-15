@@ -23,6 +23,7 @@ import {
   AppearanceConfig,
   ArchivedSessionsConfig,
   BasicsConfig,
+  BuddyConfig,
   EditorConfig,
   ExternalSourcesConfig,
   KeyboardShortcutsTab,
@@ -68,6 +69,7 @@ function resolveSettingsContent(tab: ConfigTab): React.ComponentType | null {
     case 'quick-actions':           return QuickActionsConfig;
     case 'voice-input':             return VoiceInputConfig;
     case 'review':                  return ReviewConfig;
+    case 'buddy':                   return BuddyConfig;
     case 'memories':                return MemoriesConfig;
     case 'mcp-tools':               return McpToolsConfig;
     case 'external-sources':        return ExternalSourcesConfig;

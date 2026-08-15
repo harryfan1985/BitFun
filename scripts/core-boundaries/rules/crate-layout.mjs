@@ -36,6 +36,7 @@ export const crateLayoutRules = [
   { crateName: 'sdk-host', layer: 'interfaces', path: 'src/crates/interfaces/sdk-host' },
   { crateName: 'agent-runtime-ipc', layer: 'adapters', path: 'src/crates/adapters/agent-runtime-ipc' },
   { crateName: 'ai-adapters', layer: 'adapters', path: 'src/crates/adapters/ai-adapters' },
+  { crateName: 'buddy-ble', layer: 'adapters', path: 'src/crates/adapters/buddy-ble' },
   { crateName: 'claude-code-adapter', layer: 'adapters', path: 'src/crates/adapters/claude-code-adapter' },
   { crateName: 'codex-adapter', layer: 'adapters', path: 'src/crates/adapters/codex-adapter' },
   { crateName: 'opencode-adapter', layer: 'adapters', path: 'src/crates/adapters/opencode-adapter' },

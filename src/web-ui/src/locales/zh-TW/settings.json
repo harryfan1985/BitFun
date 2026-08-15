@@ -30,6 +30,11 @@
         "審核",
         "程式碼審核"
       ],
+      "buddy": [
+        "硬體",
+        "藍牙",
+        "審批按鈕"
+      ],
       "memories": [
         "記憶",
         "長期記憶",
@@ -44,6 +49,7 @@
       "sessionPersonalization": "Agent 夥伴。",
       "sessionPermissions": "工具權限、執行方式，以及桌面和瀏覽器控制。",
       "review": "Review 策略、覆蓋深度、容量、成本和耗時控制。",
+      "buddy": "連接 M5StickC 硬體裝置作為實體審批按鈕。",
       "memories": "自動記憶生成、注入、整理窗口與記憶模型。",
       "mcpTools": "MCP 伺服器與工具集成。",
       "externalSources": "載入其他 AI 應用中相容的命令與擴充。",
@@ -69,6 +75,7 @@
       "sessionPersonalization": "個性化",
       "sessionPermissions": "權限管理",
       "review": "審核",
+      "buddy": "Buddy",
       "memories": "記憶",
       "skills": "技能",
       "mcpTools": "MCP",

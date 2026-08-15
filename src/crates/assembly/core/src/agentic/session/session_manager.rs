@@ -229,6 +229,17 @@ enum SessionResourceCleanupPolicy {
     Required,
 }
 
+/// Session counts projected to the Buddy hardware heartbeat.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct BuddyHeartbeatStats {
+    /// Number of top-level sessions in memory.
+    pub total: u32,
+    /// Sessions currently processing a turn.
+    pub running: u32,
+    /// Processing sessions blocked on a tool confirmation.
+    pub waiting: u32,
+}
+
 /// Session manager
 pub struct SessionManager {
     /// Active sessions in memory
@@ -6187,6 +6198,38 @@ impl SessionManager {
         self.persistence_manager
             .load_session_metadata(workspace_path, session_id)
             .await
+    }
+
+    /// Aggregate in-memory session counts for the Buddy hardware heartbeat.
+    ///
+    /// Counts top-level sessions only (subagents and ephemeral children are
+    /// excluded, matching `list_sessions`). `waiting` is the subset of
+    /// processing sessions currently blocked on a tool confirmation.
+    pub fn buddy_heartbeat_stats(&self) -> BuddyHeartbeatStats {
+        let mut total = 0u32;
+        let mut running = 0u32;
+        let mut waiting = 0u32;
+        for entry in self.sessions.iter() {
+            let session = entry.value();
+            if matches!(
+                session.kind,
+                SessionKind::Subagent | SessionKind::EphemeralChild
+            ) {
+                continue;
+            }
+            total += 1;
+            if let SessionState::Processing { phase, .. } = &session.state {
+                running += 1;
+                if matches!(phase, ProcessingPhase::ToolConfirming) {
+                    waiting += 1;
+                }
+            }
+        }
+        BuddyHeartbeatStats {
+            total,
+            running,
+            waiting,
+        }
     }
 
     pub async fn update_session_metadata(

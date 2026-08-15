@@ -10,6 +10,7 @@ const loadEditorConfig = () => import('../../../infrastructure/config/components
 const loadBasicsConfig = () => import('../../../infrastructure/config/components/BasicsConfig');
 const loadAppearanceConfig = () => import('../../../infrastructure/config/components/AppearanceConfig');
 const loadReviewConfig = () => import('../../../infrastructure/config/components/ReviewConfig');
+const loadBuddyConfig = () => import('../../../infrastructure/config/components/BuddyConfig');
 const loadMemoriesConfig = () => import('../../../infrastructure/config/components/MemoriesConfig');
 const loadQuickActionsConfig = () => import('../../../infrastructure/config/components/QuickActionsConfig');
 const loadVoiceInputConfig = () => import('../../../infrastructure/config/components/VoiceInputConfig');
@@ -26,6 +27,7 @@ export const EditorConfig = lazy(loadEditorConfig);
 export const BasicsConfig = lazy(loadBasicsConfig);
 export const AppearanceConfig = lazy(loadAppearanceConfig);
 export const ReviewConfig = lazy(loadReviewConfig);
+export const BuddyConfig = lazy(loadBuddyConfig);
 export const MemoriesConfig = lazy(loadMemoriesConfig);
 export const QuickActionsConfig = lazy(loadQuickActionsConfig);
 export const VoiceInputConfig = lazy(loadVoiceInputConfig);
@@ -54,6 +56,7 @@ const SETTINGS_CONTENT_LOADERS: Partial<Record<ConfigTab, () => Promise<unknown>
   'quick-actions': loadQuickActionsConfig,
   'voice-input': loadVoiceInputConfig,
   review: loadReviewConfig,
+  buddy: loadBuddyConfig,
   memories: loadMemoriesConfig,
   'mcp-tools': loadMcpToolsConfig,
   'external-sources': loadExternalSourcesConfig,

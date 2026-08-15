@@ -16,6 +16,7 @@ export type ConfigTab =
   | 'quick-actions'
   | 'voice-input'
   | 'review'
+  | 'buddy'
   | 'memories'
   | 'mcp-tools'
   | 'external-sources'
@@ -233,6 +234,23 @@ export const SETTINGS_CATEGORIES: ConfigCategoryDef[] = [
           'rollout',
           'learning',
           'knowledge',
+        ],
+      },
+      {
+        id: 'buddy',
+        labelKey: 'configCenter.tabs.buddy',
+        descriptionKey: 'configCenter.tabDescriptions.buddy',
+        keywords: [
+          'buddy',
+          'hardware',
+          'm5stick',
+          'm5stickc',
+          'ble',
+          'bluetooth',
+          'physical button',
+          'approval',
+          'confirmation',
+          'device',
         ],
       },
       {

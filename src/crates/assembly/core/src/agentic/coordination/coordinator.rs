@@ -7668,6 +7668,11 @@ Update the persona files and delete BOOTSTRAP.md as soon as bootstrap is complet
         self.session_manager.list_sessions(workspace_path).await
     }
 
+    /// Aggregate in-memory session counts for the Buddy hardware heartbeat.
+    pub fn buddy_heartbeat_stats(&self) -> crate::agentic::session::BuddyHeartbeatStats {
+        self.session_manager.buddy_heartbeat_stats()
+    }
+
     /// Get a best-effort message view for a session.
     pub async fn get_messages(&self, session_id: &str) -> BitFunResult<Vec<Message>> {
         self.session_manager.get_messages(session_id).await

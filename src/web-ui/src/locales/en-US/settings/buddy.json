@@ -1,0 +1,126 @@
+{
+  "title": "Buddy",
+  "subtitle": "Connect an M5StickC Plus hardware device as a physical tool approval channel.",
+  "loading": "Loading buddy settings...",
+  "desktopOnly": {
+    "title": "Desktop only",
+    "description": "Buddy is a local hardware peripheral feature available in the BitFun desktop app."
+  },
+  "general": {
+    "title": "General",
+    "description": "Enable the Buddy feature and choose how the bridge process is managed.",
+    "enable": {
+      "label": "Enable Buddy",
+      "description": "Route tool confirmation requests to your M5StickC Plus device."
+    },
+    "mode": {
+      "label": "Bridge Mode",
+      "description": "Managed: BitFun starts and monitors the bridge process. External: you run it yourself.",
+      "managed": "Managed (auto-start)",
+      "external": "External (manual)"
+    }
+  },
+  "connection": {
+    "title": "Connection",
+    "description": "HTTP connection between BitFun and the agent-buddy-bridge.",
+    "bridgeUrl": {
+      "label": "Bridge URL",
+      "description": "URL of the agent-buddy-bridge HTTP server."
+    },
+    "callbackPort": {
+      "label": "Callback Port",
+      "description": "Port for BitFun's callback server that receives approval results."
+    },
+    "bindAddress": {
+      "label": "Bind Address",
+      "description": "Bind address for the callback server. Use 127.0.0.1 for local-only access."
+    }
+  },
+  "paths": {
+    "title": "Bridge Paths",
+    "description": "Paths used when launching the bridge process in managed mode.",
+    "bridgePath": {
+      "label": "Bridge Path",
+      "description": "Path to the agent-buddy-bridge project directory."
+    },
+    "pythonPath": {
+      "label": "Python Path",
+      "description": "Python executable with bleak/CoreBluetooth. Auto-detected on macOS."
+    }
+  },
+  "status": {
+    "title": "Status",
+    "description": "Current connection state of the Buddy bridge and device.",
+    "bridge": {
+      "label": "Bridge",
+      "description": "Health of the bridge process and BLE device connection."
+    },
+    "online": "Online",
+    "offline": "Offline",
+    "pending": "{{count}} pending",
+    "test": {
+      "label": "Test Connection",
+      "description": "Send a test state push to the bridge and verify reachability.",
+      "button": "Test Connection",
+      "testing": "Testing..."
+    }
+  },
+  "state": {
+    "not_configured": "Not configured",
+    "bridge_starting": "Starting bridge...",
+    "scanning_for_device": "Scanning for device...",
+    "connected": "Connected",
+    "bridge_offline": "Bridge offline",
+    "device_disconnected": "Device disconnected"
+  },
+  "pill": {
+    "scanning": "Scanning...",
+    "offline": "Buddy offline"
+  },
+  "alert": {
+    "disabled": "Buddy is disabled. Enable it to route tool approvals to your M5StickC device."
+  },
+  "messages": {
+    "saved": "Buddy settings saved.",
+    "saveFailed": "Failed to save buddy settings.",
+    "testSuccess": "Bridge connection verified.",
+    "testFailed": "Bridge connection test failed."
+  },
+  "wizard": {
+    "title": "Buddy Pairing Wizard",
+    "open": "Open Pairing Wizard",
+    "prerequisites": {
+      "title": "Prerequisites Check",
+      "macos": "macOS (CoreBluetooth for BLE)",
+      "python": "Python 3.9+",
+      "bridge": "agent-buddy-bridge installed",
+      "bleak": "bleak + aiohttp packages",
+      "check": "Check Prerequisites",
+      "checking": "Checking...",
+      "failed": "Failed to check prerequisites",
+      "unsupported": "Buddy currently only supports macOS. This feature requires CoreBluetooth for BLE and is not available on this host OS."
+    },
+    "bridge": {
+      "title": "Bridge Start",
+      "description": "BitFun will start the agent-buddy-bridge process in managed mode.",
+      "managed": "The bridge will be spawned automatically with --platforms bitfun.",
+      "continue": "Continue"
+    },
+    "device": {
+      "title": "Device Discovery",
+      "description": "Searching for M5StickC Plus devices broadcasting as Claude-XXXX.",
+      "scan": "Scan for Device",
+      "scanning": "Scanning for M5StickC...",
+      "notFound": "No M5StickC found. Ensure it is powered on and not connected to another host.",
+      "scanFailed": "Failed to scan for devices."
+    },
+    "test": {
+      "title": "Test Approval",
+      "description": "A test state will be pushed to the device. Press the M5StickC button to verify the round-trip.",
+      "button": "Send Test Push",
+      "testing": "Waiting for button press...",
+      "success": "Test approval received! Buddy is ready.",
+      "failed": "Test approval failed. Check the bridge logs."
+    }
+  }
+}

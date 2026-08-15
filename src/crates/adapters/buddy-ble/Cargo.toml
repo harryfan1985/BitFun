@@ -1,0 +1,22 @@
+[package]
+name = "bitfun-buddy-ble"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description = "BLE transport adapter for the BitFun Buddy hardware approval bridge"
+autotests = false
+
+[lib]
+name = "bitfun_buddy_ble"
+crate-type = ["rlib"]
+
+[dependencies]
+btleplug = { workspace = true }
+tokio = { workspace = true, features = ["sync", "time", "macros", "rt"] }
+futures = { workspace = true, features = ["std"] }
+log = { workspace = true }
+thiserror = { workspace = true }
+uuid = { workspace = true }
+
+[lints]
+workspace = true

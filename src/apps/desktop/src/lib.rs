@@ -1253,6 +1253,12 @@ pub async fn run() {
             api::agentic_api::get_default_review_team_definition,
             api::btw_api::btw_ask_stream,
             api::btw_api::btw_cancel,
+            // Buddy hardware approval bridge
+            api::buddy_api::buddy_get_config,
+            api::buddy_api::buddy_get_status,
+            api::buddy_api::buddy_set_config,
+            api::buddy_api::buddy_test_connection,
+            api::buddy_api::buddy_check_prerequisites,
             api::editor_ai_api::editor_ai_stream,
             api::editor_ai_api::editor_ai_cancel,
             get_external_hook_catalog,
@@ -2027,6 +2033,7 @@ async fn init_agentic_system() -> anyhow::Result<(
             .await
             .map_err(|e| anyhow::anyhow!("Failed to initialize token usage service: {}", e))?,
     );
+    bitfun_core::service::token_usage::set_global_token_usage_service(token_usage_service.clone());
     let token_usage_subscriber = Arc::new(
         bitfun_core::service::token_usage::TokenUsageSubscriber::new(token_usage_service.clone()),
     );
@@ -2083,6 +2090,54 @@ async fn init_agentic_system() -> anyhow::Result<(
 
     log::info!("Cron service initialized and waiting for desktop host readiness");
     log::info!("Agentic system initialized");
+
+    // Buddy hardware approval bridge — conditionally wire if enabled.
+    // Buddy is macOS-only (CoreBluetooth BLE via the buddy-ble adapter).
+    #[cfg(feature = "buddy")]
+    {
+        if !cfg!(target_os = "macos") {
+            log::warn!("Buddy is only supported on macOS; skipping startup");
+        } else if let Ok(config_service) =
+            bitfun_core::service::config::global::GlobalConfigManager::get_service().await
+        {
+            if let Ok(buddy_config) = config_service
+                .get_config::<bitfun_core::service::config::types::BuddyConfig>(Some("buddy"))
+                .await
+            {
+                if buddy_config.enabled {
+                    log::info!("Buddy enabled");
+
+                    // Create + install the runtime, then scan/connect and
+                    // start the device notification loop.
+                    match bitfun_core::agentic::buddy::BuddyRuntime::new().await {
+                        Ok(runtime) => {
+                            let runtime = Arc::new(runtime);
+                            bitfun_core::agentic::buddy::install_buddy_runtime(Arc::clone(
+                                &runtime,
+                            ));
+                            if let Err(e) = runtime.start().await {
+                                log::error!("Failed to start buddy runtime: {}", e);
+                            }
+                            tokio::spawn(async move {
+                                std::future::pending::<()>().await;
+                                runtime.stop().await;
+                            });
+                        }
+                        Err(e) => {
+                            log::error!("Failed to create buddy runtime: {}", e);
+                        }
+                    }
+
+                    // Register event subscriber
+                    let subscriber =
+                        Arc::new(bitfun_core::agentic::buddy::BuddyEventSubscriber::new());
+                    event_router.subscribe_internal("buddy".to_string(), subscriber);
+                    log::info!("Buddy event subscriber registered");
+                }
+            }
+        }
+    }
+
     Ok((
         coordinator,
         scheduler,

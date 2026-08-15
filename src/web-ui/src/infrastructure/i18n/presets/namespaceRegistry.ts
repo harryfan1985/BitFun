@@ -37,6 +37,7 @@ export const ALL_NAMESPACES = [
   'settings/mcp',
   'settings/mcp-tools',
   'settings/memories',
+  'settings/buddy',
   'settings/quick-actions',
   'settings/review',
   'settings/session-config',

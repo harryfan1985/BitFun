@@ -90,6 +90,9 @@ bitfun-services-core = { path = "../../services/services-core", features = ["jso
 # Integration service owner crate
 bitfun-services-integrations = { path = "../../services/services-integrations", optional = true }
 
+# Buddy BLE transport adapter
+bitfun-buddy-ble = { path = "../../adapters/buddy-ble", optional = true }
+
 # Product domain owner crate
 bitfun-product-domains = { path = "../../contracts/product-domains", optional = true }
 
@@ -173,6 +176,7 @@ product-full = [
     "plugin-runtime",
     "debug-log",
     "announcement",
+    "buddy",
     "file-watch",
     "workspace-watch",
     "ssh-remote",
@@ -403,6 +407,11 @@ announcement = ["bitfun-services-integrations/announcement"]
 file-watch = ["bitfun-services-integrations/file-watch"]
 git = ["bitfun-services-integrations/git"]
 review-platform = ["bitfun-services-integrations/review-platform"]
+buddy = [
+    "dep:bitfun-buddy-ble",
+    "tokio/sync",
+    "tokio/time",
+]
 service-integrations = ["announcement", "file-watch", "git", "review-platform"]
 diagnostics = ["bitfun-services-core/diagnostics"]
 diff = ["bitfun-services-core/diff"]
