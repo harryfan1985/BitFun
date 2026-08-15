@@ -134,7 +134,7 @@ windows-core = { workspace = true }
 webview2-com = { workspace = true }
 
 [features]
-default = ["buddy"]
+default = []
 devtools = ["tauri/devtools", "bitfun-webdriver/embedded"]
 # Buddy hardware approval bridge.
 buddy = ["bitfun-core/buddy"]

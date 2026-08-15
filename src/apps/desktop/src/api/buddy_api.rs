@@ -4,6 +4,7 @@
 //! hardware peripheral and is currently macOS-only (CoreBluetooth BLE).
 
 use crate::api::app_state::AppState;
+#[cfg(feature = "buddy")]
 use bitfun_core::agentic::buddy::get_global_buddy_runtime;
 use bitfun_core::service::config::global::GlobalConfigManager;
 use bitfun_core::service::config::types::BuddyConfig;
@@ -46,24 +47,32 @@ pub async fn buddy_get_status(_state: State<'_, AppState>) -> Result<BuddyStatus
         .await
         .map_err(|e| e.to_string())?;
 
-    let (bridge_online, device_name, device_connected, pending_prompts, state) =
-        if let Some(runtime) = get_global_buddy_runtime() {
-            let connected = runtime.is_connected().await;
-            (
-                connected,
-                runtime.device_name(),
-                connected,
-                runtime.state().pending_count(),
-                if connected {
-                    "connected"
-                } else {
-                    "scanning_for_device"
-                }
-                .to_string(),
-            )
-        } else {
+    let (bridge_online, device_name, device_connected, pending_prompts, state) = {
+        #[cfg(feature = "buddy")]
+        {
+            if let Some(runtime) = get_global_buddy_runtime() {
+                let connected = runtime.is_connected().await;
+                (
+                    connected,
+                    runtime.device_name(),
+                    connected,
+                    runtime.state().pending_count(),
+                    if connected {
+                        "connected"
+                    } else {
+                        "scanning_for_device"
+                    }
+                    .to_string(),
+                )
+            } else {
+                (false, None, false, 0, "not_configured".to_string())
+            }
+        }
+        #[cfg(not(feature = "buddy"))]
+        {
             (false, None, false, 0, "not_configured".to_string())
-        };
+        }
+    };
 
     Ok(BuddyStatusResponse {
         enabled: config.enabled,
@@ -97,16 +106,29 @@ pub async fn buddy_set_config(
 
 #[tauri::command]
 pub async fn buddy_test_connection() -> Result<bool, String> {
-    let runtime = get_global_buddy_runtime().ok_or_else(|| "Buddy not started".to_string())?;
-    Ok(runtime.is_connected().await)
+    #[cfg(feature = "buddy")]
+    {
+        let runtime =
+            get_global_buddy_runtime().ok_or_else(|| "Buddy not started".to_string())?;
+        Ok(runtime.is_connected().await)
+    }
+    #[cfg(not(feature = "buddy"))]
+    {
+        Err("Buddy is not built in this build".to_string())
+    }
 }
 
 #[tauri::command]
 pub async fn buddy_check_prerequisites() -> Result<BuddyPrerequisites, String> {
     let os = std::env::consts::OS;
-    // Buddy is currently macOS-only (CoreBluetooth BLE backend).
+    // Buddy is macOS-only (CoreBluetooth BLE backend), and only available when
+    // the buddy feature is compiled in.
+    #[cfg(feature = "buddy")]
+    let supported = os == "macos";
+    #[cfg(not(feature = "buddy"))]
+    let supported = false;
     Ok(BuddyPrerequisites {
-        supported: os == "macos",
+        supported,
         os: os.to_string(),
     })
 }

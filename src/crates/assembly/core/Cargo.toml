@@ -176,7 +176,6 @@ product-full = [
     "plugin-runtime",
     "debug-log",
     "announcement",
-    "buddy",
     "file-watch",
     "workspace-watch",
     "ssh-remote",
